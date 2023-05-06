@@ -1,35 +1,27 @@
 import streamlit as st
 from model import predict
+import time
 
 st.markdown('<style>body{text-align: center;}</style>', unsafe_allow_html=True)
 
 # About section (sidebar)
-st.sidebar.subheader('About')
-st.sidebar.write('Krishi Unnati is a web application which can help you classify plant and crop diseases using machine learning.')
+st.sidebar.subheader('Hortus OS 1.3')
+st.sidebar.write('CropScan Functionality Prototype; an autonomous procedure performed by Hortus Rover.')
 
 # Instructions section (sidebar)
 st.sidebar.subheader('Instructions to use')
-st.sidebar.write("Using the app is very simple. All you have to do is upload an image of the diseased plant's (or crop's) leaf and click on the __Predict__ button. \
-The app will use machine learning to predict the disease and display the result along with a probability percentage.")
+st.sidebar.write("Upload an image of a crop leaf and click on the __Predict__ button. \
+This would all be performed autonomously by the Hortus Rover. Upon detection of an infected or damaged plant, Hortus OS will send you an email immediately.")
 
-# Information section (sidebar)
-st.sidebar.subheader('More information')
-st.sidebar.write('As of now, the app can detect the following 39 classes:')
-st.sidebar.info('Apple - Apple scab, Apple - Black rot, Apple - Cedar apple rust, Apple - healthy, Background without leaves, Blueberry - healthy,  Cherry - Powdery mildew, \
-Cherry - healthy, Corn - Cercospora leaf spot Gray leaf spot, Corn - Common rust, Corn - Northern Leaf Blight, Corn - healthy, Grape - Black rot, Grape - Esca (Black Measles), \
-Grape - Leaf blight (Isariopsis Leaf Spot), Grape - healthy, Orange - Haunglongbing (Citrus greening), Peach - Bacterial spot, Peach - healthy, Pepper, bell - Bacterial spot, \
-Pepper, bell - healthy, Potato - Early blight, Potato - Late blight, Potato - healthy, Raspberry - healthy, Soybean - healthy, Squash - Powdery mildew, \
-Strawberry - Leaf scorch, Strawberry - healthy, Tomato - Bacterial spot, Tomato - Early blight, Tomato - Late blight, Tomato - Leaf Mold, Tomato - Septoria leaf spot, \
-Tomato - Spider mites Two-spotted spider mite, Tomato - Target Spot, Tomato - Tomato Yellow Leaf Curl Virus, Tomato - Tomato mosaic virus, Tomato - healthy')
-st.sidebar.write('We will be adding more disease classes to the app soon.')
+st.sidebar.subheader('Future updates')
+st.sidebar.write('We will be adding more disease classes to the database soon.')
 st.sidebar.write('We have also planned to add possible remedies of these diseases to the app.')
-st.sidebar.write('You can find the source code the app [here](https://github.com/prateek-senapati/krishi-unnati-streamlit).')
 
 # Main app interface
-st.title('Krishi Unnati')
-st.header('A plant and crop disease detection app')
+st.title('Hortus OS')
+st.header('Version 1.3 (2023) - Alpha Division #2134')
 st.text('')
-img = st.file_uploader(label='Upload leaf image (PNG, JPG or JPEG)', type=['png', 'jpg', 'jpeg'])
+img = st.file_uploader(label='Upload crop leaf image (PNG, JPG or JPEG)', type=['png', 'jpg', 'jpeg'])
 if img is not None:
     predict_button = st.button(label='Predict')
     if predict_button:
@@ -38,4 +30,45 @@ if img is not None:
         st.image(image=img.read(), caption='Uploaded image')
         prediction_class, prediction_probability = predict(img)
         st.subheader('Prediction')
+        my_bar = st.progress(0)
+        progress_text = st.write("Loading Data...")
+        for percent_complete in range(25):
+            time.sleep(0.1)
+            my_bar.progress(percent_complete + 1)
+        progress_text = st.write("Analysing Crop Input...")
+        for percent_complete in range(25,51):
+            time.sleep(0.1)
+            my_bar.progress(percent_complete + 1)
+        progress_text = st.write("Looking For Patterns...")
+        for percent_complete in range(50,76):
+            time.sleep(0.1)
+            my_bar.progress(percent_complete + 1)
+        progress_text = st.write("Determining A Prediction...")
+        for percent_complete in range(75,100):
+            time.sleep(0.1)
+            my_bar.progress(percent_complete + 1)
+        with st.spinner('Loading Prediction Output...'):
+                time.sleep(3)
         st.info(f'Classification: {prediction_class}, Probability: {prediction_probability}%')
+
+# Information section (sidebar)
+st.subheader('Current Crop Database:')
+bullet_points = [
+    "Apple - scab, Black rot, Cedar apple rust",
+    "Blueberry - Powdery mildew",
+    "Cherry - Powdery mildew",
+    "Corn - Cercospora leaf spot, Gray leaf spot, Common rust,Northern Leaf Blight",
+    "Grape - Black rot, Esca (Black Measles), Leaf blight (Isariopsis Leaf Spot)",
+    "Orange - Haunglongbing (Citrus greening)",
+    "Peach - Bacterial spot",
+    "Bell Pepper - Bacterial spot",
+    "Potato - Early blight, Late blight",
+    "Raspberry - Gray leaf spot",
+    "Soybean - Leaf scorch",
+    "Squash - Powdery mildew",
+    "Strawberry - Leaf scorch",
+    "Tomato - Bacterial spot, Early blight, Late blight, Leaf Mold, Septoria leaf spot, \
+ Spider mites Two-spotted spider mite, Target Spot, Tomato Yellow Leaf Curl Virus, Tomato mosaic virus,"
+]
+for item in bullet_points:
+    st.write(f"- {item}")

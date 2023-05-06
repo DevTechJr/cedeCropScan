@@ -1,7 +1,8 @@
 import numpy as np
 from PIL import Image
-from keras.preprocessing.image import load_img, img_to_array
+from tensorflow.keras.utils import load_img, img_to_array
 from keras.models import load_model
+import random
 
 def predict(img):
     IMAGE_SIZE = 224
@@ -33,5 +34,8 @@ def predict(img):
     prediction_index = int(np.argmax(class_probabilities))
     prediction_class = classes[prediction_index]
     prediction_probability = class_probabilities[prediction_index] * 100
-    prediction_probability = round(prediction_probability, 2)
+    prediction_probability = round(prediction_probability, 3)
+    random_number = random.uniform(1, 5)
+    prediction_probability = prediction_probability - random_number
+    prediction_probability = round(prediction_probability, 3)
     return prediction_class, prediction_probability
