@@ -1,6 +1,8 @@
 import streamlit as st
 from model import predict
 import time
+import smtplib
+from email.mime.text import MIMEText
 
 st.markdown('<style>body{text-align: center;}</style>', unsafe_allow_html=True)
 
@@ -50,6 +52,20 @@ if img is not None:
         with st.spinner('Loading Prediction Output...'):
                 time.sleep(3)
         st.info(f'Classification: {prediction_class}, Probability: {prediction_probability}%')
+        if "healthy" not in prediction_class.lower():
+            # Define email parameters
+            sender_email = "hortusos.cropscan@gmail.com"
+            receiver_email = "vangara.anirudhbharadwaj@gmail.com"
+            password = "bmgbmawndqngvxin"
+            message = MIMEText(f"Warning! Hortus Rover has identified Crop #(Crop ID) to have {prediction_class}. Hortus OS suggests immediate aid and a check on the crop.")
+            message["Subject"] = f"(Crop ID) - {prediction_class}"
+            message["From"] = sender_email
+            message["To"] = receiver_email
+
+            # Send email
+            with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+                server.login(sender_email, password)
+                server.sendmail(sender_email, receiver_email, message.as_string())
 
 # Information section (sidebar)
 st.subheader('Current Crop Database:')
