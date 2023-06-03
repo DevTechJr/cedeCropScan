@@ -1,3 +1,3 @@
-# Hortus OS CropScan (Streamlit Web App)
+# Cede CropScan (TechHours Cede App Prototype)
 
 
